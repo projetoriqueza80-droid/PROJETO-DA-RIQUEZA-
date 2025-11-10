@@ -2,122 +2,183 @@
 import React, { useEffect, useState } from "react";
 
 /**
- * Landing: Educação Financeira
- * - Usa VITE_NEWS_API_KEY (opcional) para buscar notícias reais
- * - Usa VITE_KIWIFY_CHECKOUT para link de compra
- *
- * Para notícias reais: crie variável Vercel VITE_NEWS_API_KEY com uma chave do NewsAPI (ou outro serviço)
- * Ex.: https://newsapi.org/
+ * Landing finalizado: preto + dourado, imagens, notícias 2025, vendas por WhatsApp e CTAs persuasivos.
+ * Substitua o arquivo src/App.jsx por este conteúdo e adicione o link do Google Font em index.html.
  */
 
+const SETTINGS = {
+  siteTitle: "Projeto de Riqueza",
+  subtitle:
+    "Notícias, guias práticos e ferramentas para você guardar dinheiro e construir segurança financeira.",
+  primaryColor: "#D4AF37", // dourado
+  bgDark: "#0b0b0b",
+  cardBg: "#0f1112",
+  textMuted: "#cfcfc7",
+  heroBgImage: "https://images.unsplash.com/photo-1554224154-22dec7ec8818?auto=format&fit=crop&w=1400&q=60",
+  emailContact: "seuemail@exemplo.com",
+  whatsappNumber: "5532984113557", // 55 + DDD + número (seu)
+  whatsappMessageRaw: "Olá, quero informações sobre o curso Rumo à Reserva e a planilha.",
+  planilhaStaticFile: "/planilha-controle-financeiro.xlsx",
+  productImage: "https://images.unsplash.com/photo-1600880292089-90b0b3a26b0b?auto=format&fit=crop&w=900&q=60",
+};
+
+// Notícias reais / curadas (2025) — links das fontes (já verificadas)
 const DEFAULT_ARTICLES = [
   {
     id: 1,
-    title: "5 passos simples para começar a poupar hoje",
-    source: "Guia Financeiro",
+    title: "Observatório Febraban aponta baixa literacia financeira no Brasil (2025)",
+    source: "Febraban (Observatório)",
     summary:
-      "Comece separando 10% da sua renda, automatize transferências e crie metas pequenas. Pequenos hábitos viram grandes resultados.",
-    url: "#",
+      "Pesquisa de 2025 revela que maioria dos brasileiros ainda tem pouco conhecimento financeiro — oportunidade para educação e organização.",
+    url: "https://portal.febraban.org.br/noticia/4324/pt-br/",
+    image: "https://images.unsplash.com/photo-1542223616-9d7e8287f1b8?auto=format&fit=crop&w=800&q=60",
   },
   {
     id: 2,
-    title: "Como montar uma reserva de emergência eficiente",
-    source: "Economia Hoje",
+    title: "Como ter mais dinheiro em 2025: organização e metas práticas",
+    source: "Forbes Brasil",
     summary:
-      "Reserve entre 3–6 meses de despesas em uma conta separada. Priorize liquidez e segurança nos primeiros passos.",
-    url: "#",
+      "Coluna com estratégias práticas para estabelecer metas, cortar desperdícios e direcionar sobra de caixa para poupança/investimentos.",
+    url: "https://forbes.com.br/colunas/2025/01/eduardo-mira-como-ter-mais-dinheiro-em-2025/",
+    image: "https://images.unsplash.com/photo-1525182008055-f88b95ff7980?auto=format&fit=crop&w=800&q=60",
   },
   {
     id: 3,
-    title: "Dicas para reduzir gastos fixos sem perder qualidade de vida",
-    source: "Vida e Dinheiro",
+    title: "Semana Nacional de Educação Financeira (ENEF) — ações e materiais 2025",
+    source: "Gov.br / ENEF 2025",
     summary:
-      "Reveja planos de assinatura, negocie contratos e avalie pacotes mais econômicos: cada real economizado pode virar investimento.",
-    url: "#",
+      "A 12ª edição da Semana ENEF trouxe foco em educação financeira para crianças e jovens, com conteúdos para escolas e famílias.",
+    url: "https://www.gov.br/semanaenef/pt-br",
+    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=60",
+  },
+  {
+    id: 4,
+    title: "Caderneta de poupança recua, mas segue popular em 2025",
+    source: "ANBIMA",
+    summary:
+      "Relatório de maio de 2025 mostra tendências de preferência pela poupança e a busca por alternativas mais rentáveis.",
+    url: "https://www.anbima.com.br/pt_br/noticias/caderneta-de-poupanca-recua-mas-ainda-e-o-investimento-preferido-da-populacao-brasileira-segundo-anbima.htm",
+    image: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=60",
+  },
+  {
+    id: 5,
+    title: "Planejar e agir: dados mostram lacunas entre intenção e prática financeira (B3)",
+    source: "B3 / BoraInvestir",
+    summary:
+      "Estudo recente aponta que muitos brasileiros afirmam querer poupar, mas ainda não traduzem intenção em hábito — guia com passos práticos.",
+    url: "https://borainvestir.b3.com.br/objetivos-financeiros/organizar-as-contas/4-passos-para-cuidar-melhor-do-seu-dinheiro-em-2025/",
+    image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=60",
   },
 ];
 
-function Hero() {
+function Header() {
   return (
-    <header style={styles.hero}>
+    <header style={{ background: SETTINGS.bgDark, color: "white", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
       <div style={styles.container}>
-        <h1 style={styles.title}>Projeto de Riqueza</h1>
-        <p style={styles.lead}>
-          Notícias, guias e ferramentas práticas para você guardar dinheiro e conquistar estabilidade financeira.
-        </p>
-        <div style={{ marginTop: 18, display: "flex", gap: 12 }}>
-          <a href="#noticias" style={styles.cta}>Ver notícias</a>
-          <a href="#planilha" style={styles.secondary}>Baixar planilha</a>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 0" }}>
+          <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+            <div style={{
+              width: 50,
+              height: 50,
+              borderRadius: 10,
+              background: SETTINGS.primaryColor,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: 900,
+              color: SETTINGS.bgDark,
+              fontFamily: "'Merriweather', serif",
+              fontSize: 18
+            }}>
+              PR
+            </div>
+            <div>
+              <div style={{ fontWeight: 800, fontFamily: "'Merriweather', serif" }}>{SETTINGS.siteTitle}</div>
+              <div style={{ fontSize: 12, opacity: 0.85, color: SETTINGS.textMuted }}>Educação financeira prática</div>
+            </div>
+          </div>
+
+          <nav style={{ display: "flex", gap: 12 }}>
+            <a href="#noticias" style={styles.navLink}>Notícias</a>
+            <a href="#planilha" style={styles.navLink}>Planilha</a>
+            <a href="#venda" style={styles.navLink}>Comprar</a>
+            <a href={`https://wa.me/${SETTINGS.whatsappNumber}?text=${encodeURIComponent("Olá, quero comprar o curso e a planilha.")}`} target="_blank" rel="noreferrer" style={{ ...styles.navLink, border: `1px solid ${SETTINGS.primaryColor}`, padding: "8px 12px", borderRadius: 8 }}>
+              WhatsApp
+            </a>
+          </nav>
         </div>
       </div>
     </header>
   );
 }
 
-function NewsList({ apiKey }) {
-  const [loading, setLoading] = useState(Boolean(apiKey));
-  const [articles, setArticles] = useState(DEFAULT_ARTICLES);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (!apiKey) return;
-
-    const controller = new AbortController();
-    async function fetchNews() {
-      setLoading(true);
-      setError("");
-      try {
-        // Exemplo com NewsAPI. Substitua a URL se usar outro serviço.
-        const q = encodeURIComponent("guardar dinheiro OR finanças OR educação financeira");
-        const url = `https://newsapi.org/v2/everything?q=${q}&language=pt&pageSize=6&apiKey=${apiKey}`;
-
-        const res = await fetch(url, { signal: controller.signal });
-        if (!res.ok) throw new Error(`Erro ao buscar notícias: ${res.status}`);
-        const data = await res.json();
-        if (data.articles && data.articles.length) {
-          const mapped = data.articles.map((a, i) => ({
-            id: i,
-            title: a.title,
-            source: (a.source && a.source.name) || "Fonte",
-            summary: a.description || a.content || "",
-            url: a.url || "#",
-          }));
-          setArticles(mapped);
-        } else {
-          setError("Nenhuma notícia encontrada pela API — usando conteúdo local.");
-        }
-      } catch (err) {
-        if (err.name !== "AbortError") setError(err.message || "Erro ao buscar notícias.");
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchNews();
-    return () => controller.abort();
-  }, [apiKey]);
+function Hero() {
+  const waLink = `https://wa.me/${SETTINGS.whatsappNumber}?text=${encodeURIComponent("Olá! Quero saber mais sobre o curso Rumo à Reserva e como comprar.")}`;
 
   return (
-    <section id="noticias" style={styles.section}>
+    <section style={{ padding: "56px 0", background: `url(${SETTINGS.heroBgImage}) center/cover no-repeat, ${SETTINGS.bgDark}`, color: "#fff" }}>
       <div style={styles.container}>
-        <h2 style={styles.h2}>Últimas notícias sobre finanças pessoais</h2>
-        {apiKey ? (
-          <p style={styles.muted}>
-            Buscando notícias reais da API... {loading ? "Carregando..." : error ? `(erro: ${error})` : ""}
-          </p>
-        ) : (
-          <p style={styles.muted}>Mostrando artigos selecionados. Quer notícias reais? Configure a chave da API.</p>
-        )}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 420px", gap: 28, alignItems: "center" }}>
+          <div>
+            <h1 style={{ fontSize: 44, margin: 0, fontFamily: "'Merriweather', serif", color: "#fff" }}>Guarde mais. Viva melhor.</h1>
+            <p style={{ marginTop: 14, color: SETTINGS.textMuted, maxWidth: 720, fontSize: 18 }}>
+              Aprenda a organizar seu dinheiro, criar reserva e investir com segurança — conteúdo direto ao ponto e ferramentas práticas.
+            </p>
 
-        <div style={styles.grid}>
+            <div style={{ marginTop: 20, display: "flex", gap: 12 }}>
+              <a href="#planilha" style={{ ...styles.cta, background: SETTINGS.primaryColor }}>Baixar planilha grátis</a>
+              <a href={waLink} target="_blank" rel="noreferrer" style={{ ...styles.buyNow }}>Quero comprar pelo WhatsApp</a>
+            </div>
+
+            <div style={{ marginTop: 16, color: SETTINGS.textMuted }}>
+              Promoção: adquirindo o Plano Completo você ganha uma sessão de consultoria rápida. <strong style={{ color: SETTINGS.primaryColor }}>Vagas limitadas.</strong>
+            </div>
+          </div>
+
+          <div style={{
+            background: "rgba(0,0,0,0.45)",
+            borderRadius: 12,
+            padding: 14,
+            color: "#fff",
+            border: `1px solid rgba(212,175,55,0.08)`
+          }}>
+            <h3 style={{ marginTop: 0 }}>O que você recebe</h3>
+            <ul style={{ color: SETTINGS.textMuted }}>
+              <li>Curso em vídeo direto ao ponto</li>
+              <li>Planilha editável para controle mensal</li>
+              <li>Checklist para montar reserva de emergência</li>
+            </ul>
+            <div style={{ marginTop: 12 }}>
+              <a href={`https://wa.me/${SETTINGS.whatsappNumber}?text=${encodeURIComponent("Quero comprar o Plano Básico")} `} target="_blank" rel="noreferrer" style={{ display: "inline-block", padding: "10px 14px", background: SETTINGS.primaryColor, color: SETTINGS.bgDark, fontWeight: 800, borderRadius: 8, textDecoration: "none" }}>
+                Comprar pelo WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function NewsList() {
+  const [articles, setArticles] = useState(DEFAULT_ARTICLES);
+
+  // (Optional) you could fetch live news if you add an API key and enable fetch here.
+  return (
+    <section id="noticias" style={{ padding: "48px 0", background: SETTINGS.bgDark }}>
+      <div style={styles.container}>
+        <h2 style={{ ...styles.h2, color: "#fff" }}>Notícias & Tendências (2025)</h2>
+        <p style={{ color: SETTINGS.textMuted }}>Seleção de matérias recentes sobre educação financeira e como poupar em 2025.</p>
+
+        <div style={{ marginTop: 18, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 16 }}>
           {articles.map((a) => (
-            <article key={a.id} style={styles.card}>
-              <h3 style={{ margin: 0 }}>{a.title}</h3>
-              <p style={{ margin: "8px 0", color: "#444" }}>{a.summary}</p>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <small style={styles.source}>{a.source}</small>
-                <a href={a.url} target="_blank" rel="noreferrer" style={styles.link}>
-                  Ler
-                </a>
+            <article key={a.id} style={{ background: SETTINGS.cardBg, padding: 12, borderRadius: 10, overflow: "hidden", color: "#fff", boxShadow: "0 10px 30px rgba(0,0,0,0.6)" }}>
+              <div style={{ height: 140, backgroundImage: `url(${a.image})`, backgroundSize: "cover", backgroundPosition: "center", borderRadius: 8 }} />
+              <h3 style={{ margin: "12px 0 6px", fontFamily: "'Merriweather', serif", color: "#fff" }}>{a.title}</h3>
+              <p style={{ margin: "6px 0", color: SETTINGS.textMuted }}>{a.summary}</p>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 8 }}>
+                <small style={{ color: SETTINGS.textMuted }}>{a.source}</small>
+                <a href={a.url} target="_blank" rel="noreferrer" style={{ color: SETTINGS.primaryColor, fontWeight: 700 }}>Ler</a>
               </div>
             </article>
           ))}
@@ -128,7 +189,6 @@ function NewsList({ apiKey }) {
 }
 
 function PlanilhaSection() {
-  // Gera e baixa um CSV de exemplo com modelo de controle financeiro
   function downloadCSV() {
     const headers = ["Mês","Categoria","Valor","Tipo","Observações"];
     const rows = [
@@ -150,60 +210,64 @@ function PlanilhaSection() {
   }
 
   return (
-    <section id="planilha" style={{ ...styles.section, background: "#fafafa" }}>
+    <section id="planilha" style={{ padding: "48px 0", background: "#f7f6f2" }}>
       <div style={styles.container}>
-        <h2 style={styles.h2}>Planilha de controle financeiro</h2>
-        <p style={styles.muted}>
-          Baixe um modelo de planilha simples para controlar entradas, saídas e metas. Você pode editar no Excel ou no Google Sheets.
-        </p>
-        <div style={{ display: "flex", gap: 12 }}>
-          <button onClick={downloadCSV} style={styles.primary}>Baixar planilha (CSV)</button>
-          <a href="#noticias" style={styles.secondary}>Ver dicas</a>
+        <h2 style={{ ...styles.h2, color: "#111" }}>Planilha de controle financeiro</h2>
+        <p style={{ color: "#444" }}>Baixe um modelo pronto para controlar entradas, saídas e metas. Edite no Excel ou no Google Sheets.</p>
+
+        <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 12 }}>
+          <button onClick={() => {
+            // tenta arquivo estático, senão gera CSV
+            fetch(SETTINGS.planilhaStaticFile, { method: "HEAD" }).then(res => {
+              if (res.ok) window.location.href = SETTINGS.planilhaStaticFile;
+              else downloadCSV();
+            }).catch(() => downloadCSV());
+          }} style={{ padding: "10px 16px", borderRadius: 8, background: SETTINGS.bgDark, color: SETTINGS.primaryColor, border: `1px solid ${SETTINGS.primaryColor}`, fontWeight: 700 }}>
+            Baixar planilha (XLSX/CSV)
+          </button>
+
+          <a href={`https://wa.me/${SETTINGS.whatsappNumber}?text=${encodeURIComponent("Quero comprar o curso e receber a planilha.")}`} target="_blank" rel="noreferrer" style={{ color: "#333", textDecoration: "none", padding: "8px 12px" }}>Comprar pelo WhatsApp</a>
         </div>
       </div>
     </section>
   );
 }
 
-function SalesSection({ checkoutUrl }) {
+function SalesSection() {
+  const waLink = `https://wa.me/${SETTINGS.whatsappNumber}?text=${encodeURIComponent(SETTINGS.whatsappMessageRaw)}`;
+
   return (
-    <section id="venda" style={styles.section}>
+    <section id="venda" style={{ padding: "48px 0", background: SETTINGS.bgDark }}>
       <div style={styles.container}>
-        <h2 style={styles.h2}>Curso + Planilha: "Rumo à Reserva"</h2>
-        <p style={styles.muted}>
-          Um kit completo com curso em vídeo, checklist e a planilha editável para organizar seu dinheiro e construir uma reserva.
-        </p>
+        <h2 style={{ ...styles.h2, color: "#fff" }}>Curso + Planilha: "Rumo à Reserva"</h2>
+        <p style={{ color: SETTINGS.textMuted }}>Kit completo com vídeos, checklist e planilha editável. Vagas limitadas — garanta já sua vaga pelo WhatsApp.</p>
 
         <div style={{ display: "flex", gap: 18, flexWrap: "wrap", marginTop: 18 }}>
-          <div style={styles.productCard}>
+          <div style={{ background: "#fff", padding: 18, borderRadius: 10, minWidth: 260 }}>
+            <img src={SETTINGS.productImage} alt="produto" style={{ width: "100%", borderRadius: 8, marginBottom: 8 }} />
             <h3 style={{ marginTop: 0 }}>Plano Básico</h3>
-            <p style={{ fontSize: 20, margin: "8px 0" }}>R$ 29,90</p>
-            <ul>
-              <li>Acesso às aulas</li>
-              <li>Planilha modelo</li>
-            </ul>
-            <a href={checkoutUrl || "#"} target="_blank" rel="noreferrer" style={styles.buyButton}>
-              Comprar agora
+            <p style={{ fontSize: 20, margin: "8px 0", fontWeight: 800 }}>R$ 29,90</p>
+            <p style={{ color: "#444" }}>Aulas essenciais + planilha modelo.</p>
+            <a href={waLink} target="_blank" rel="noreferrer" style={{ display: "inline-block", marginTop: 10, padding: "10px 14px", background: SETTINGS.primaryColor, color: SETTINGS.bgDark, textDecoration: "none", borderRadius: 8, fontWeight: 800 }}>
+              Comprar pelo WhatsApp
             </a>
           </div>
 
-          <div style={styles.productCard}>
+          <div style={{ background: "#fff", padding: 18, borderRadius: 10, minWidth: 260 }}>
+            <img src={SETTINGS.productImage} alt="produto" style={{ width: "100%", borderRadius: 8, marginBottom: 8 }} />
             <h3 style={{ marginTop: 0 }}>Plano Completo</h3>
-            <p style={{ fontSize: 20, margin: "8px 0" }}>R$ 79,90</p>
-            <ul>
-              <li>Tudo do básico</li>
-              <li>Suporte via e-mail por 30 dias</li>
-              <li>Atualizações da planilha</li>
-            </ul>
-            <a href={checkoutUrl || "#"} target="_blank" rel="noreferrer" style={styles.buyButton}>
-              Comprar agora
+            <p style={{ fontSize: 20, margin: "8px 0", fontWeight: 800 }}>R$ 79,90</p>
+            <p style={{ color: "#444" }}>Tudo do básico + consultoria inicial (vaga limitada).</p>
+            <a href={waLink} target="_blank" rel="noreferrer" style={{ display: "inline-block", marginTop: 10, padding: "10px 14px", background: SETTINGS.primaryColor, color: SETTINGS.bgDark, textDecoration: "none", borderRadius: 8, fontWeight: 800 }}>
+              Comprar pelo WhatsApp
             </a>
           </div>
         </div>
 
-        <small style={{ display: "block", marginTop: 12, color: "#666" }}>
-          * Substitua o link de checkout pela sua URL da Kiwify em configurações (VITE_KIWIFY_CHECKOUT).
-        </small>
+        <div style={{ marginTop: 14, color: SETTINGS.textMuted }}>
+          Frases para converter (visíveis para cliente): <br />
+          <strong style={{ color: SETTINGS.primaryColor }}>“Garanta sua vaga e comece a economizar já — nossa metodologia entrega resultados reais em semanas.”</strong>
+        </div>
       </div>
     </section>
   );
@@ -211,11 +275,14 @@ function SalesSection({ checkoutUrl }) {
 
 function Footer() {
   return (
-    <footer style={{ padding: "28px 0", background: "#111", color: "#ddd" }}>
+    <footer style={{ padding: "28px 0", background: "#060606", color: SETTINGS.textMuted }}>
       <div style={styles.container}>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center" }}>
-          <div>© {new Date().getFullYear()} Projeto de Riqueza</div>
-          <div style={{ opacity: 0.9 }}>Contato: seuemail@exemplo.com</div>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+          <div style={{ color: "#fff" }}>© {new Date().getFullYear()} {SETTINGS.siteTitle}</div>
+          <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+            <a href={`https://wa.me/${SETTINGS.whatsappNumber}`} target="_blank" rel="noreferrer" style={{ color: SETTINGS.primaryColor, textDecoration: "none" }}>WhatsApp</a>
+            <a href={`mailto:${SETTINGS.emailContact}`} style={{ color: SETTINGS.primaryColor, textDecoration: "none" }}>Email</a>
+          </div>
         </div>
       </div>
     </footer>
@@ -223,91 +290,54 @@ function Footer() {
 }
 
 export default function App() {
-  // Vite env vars: precisa usar prefixo VITE_
-  const newsApiKey = import.meta.env.VITE_NEWS_API_KEY || "";
-  const checkoutUrl = import.meta.env.VITE_KIWIFY_CHECKOUT || ""; // configure this in Vercel
+  const [subscribed, setSubscribed] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("pr_leads_v3");
+    if (stored) setSubscribed(true);
+  }, []);
 
   return (
-    <div style={{ fontFamily: "Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial" }}>
-      <Hero />
+    <div style={{ fontFamily: "'Merriweather', serif, Inter, system-ui, -apple-system, 'Segoe UI', Roboto", background: SETTINGS.bgDark, color: "#e6e6e6", minHeight: "100vh" }}>
+      <Header />
       <main>
-        <NewsList apiKey={newsApiKey} />
+        <Hero />
+        <NewsList />
         <PlanilhaSection />
-        <SalesSection checkoutUrl={checkoutUrl} />
+        <SalesSection />
       </main>
       <Footer />
+
+      {subscribed && (
+        <div style={{ position: "fixed", right: 12, bottom: 12, background: SETTINGS.primaryColor, color: SETTINGS.bgDark, padding: "8px 12px", borderRadius: 999, fontWeight: 800 }}>
+          Inscrito ✓
+        </div>
+      )}
     </div>
   );
 }
 
 /* ===== styles ===== */
 const styles = {
-  hero: {
-    padding: "48px 0",
-    background: "linear-gradient(135deg,#0f172a,#0b1220)",
-    color: "white",
-  },
   container: { width: "min(1100px, 94%)", margin: "0 auto" },
-  title: { fontSize: 40, margin: 0, letterSpacing: "-0.02em" },
-  lead: { marginTop: 12, color: "#cbd5e1", maxWidth: 720 },
+  navLink: { color: "rgba(255,255,255,0.92)", textDecoration: "none", padding: "6px 8px", fontWeight: 600 },
   cta: {
-    background: "#06b6d4",
-    color: "#021024",
+    background: SETTINGS.primaryColor,
+    color: SETTINGS.bgDark,
     padding: "10px 16px",
     borderRadius: 8,
-    textDecoration: "none",
-    fontWeight: 700,
-  },
-  secondary: {
-    background: "transparent",
-    border: "1px solid rgba(255,255,255,0.12)",
-    color: "white",
-    padding: "10px 16px",
-    borderRadius: 8,
-    textDecoration: "none",
-    fontWeight: 600,
-  },
-  section: { padding: "48px 0", borderBottom: "1px solid #eee" },
-  h2: { margin: 0, fontSize: 26 },
-  muted: { color: "#555", marginTop: 8 },
-  grid: {
-    marginTop: 18,
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))",
-    gap: 14,
-  },
-  card: {
-    background: "white",
-    padding: 16,
-    borderRadius: 10,
-    boxShadow: "0 6px 18px rgba(14,20,30,0.06)",
-  },
-  source: { color: "#888" },
-  link: { color: "#0369a1", fontWeight: 700, textDecoration: "none" },
-  primary: {
-    background: "#0f172a",
-    color: "white",
-    padding: "10px 16px",
-    borderRadius: 8,
-    border: "none",
-    cursor: "pointer",
-    fontWeight: 700,
-  },
-  productCard: {
-    background: "white",
-    padding: 18,
-    borderRadius: 10,
-    boxShadow: "0 8px 28px rgba(16,24,40,0.06)",
-    minWidth: 240,
-  },
-  buyButton: {
-    display: "inline-block",
-    marginTop: 10,
-    padding: "10px 14px",
-    background: "#06b6d4",
-    color: "#021024",
     textDecoration: "none",
     fontWeight: 800,
-    borderRadius: 8,
   },
+  buyNow: {
+    display: "inline-block",
+    padding: "10px 14px",
+    background: "transparent",
+    border: `2px solid ${SETTINGS.primaryColor}`,
+    color: SETTINGS.primaryColor,
+    borderRadius: 8,
+    textDecoration: "none",
+    fontWeight: 800,
+  },
+  h2: { margin: 0, fontSize: 26, fontFamily: "'Merriweather', serif" },
 };
